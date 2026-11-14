@@ -70,9 +70,63 @@ preventing unauthorised access (OWASP, n.d.).
 
 ![The Target Login Page](screenshots/1.png)
 
+The default page the target leads to. Note that errors are hidden from the user as the site
+reloads when invalid credentials are put in.
+
+![Failed Login Attempt](screenshots/2.png)
+
+Reveals that login requires both fields to be filled to submit a payload.
+
+![An Example select statement that webpage use for user credentials.](screenshots/3.png)
+
+If the user input is handled without any validation the attacker can manipulate this
+select query to make malicious payloads.
+
 ### 2.2 In-Band SQLi
+
 #### 2.2.1 Authentication Bypass SQLi
+
+Authentication bypass attacks attempt to bypass login verification by manipulating the
+SQL query to have an always true value while commenting out the password check
+entirely. This is done completely using the username field. (scriptpy, 2026)
+
+![Failed authentication bypass payload](screenshots/4.png)
+
+The payload was crafted with the idea that the select statement is similar or identical to
+Figure 3. It is essential to identify which type of database is being used by the login such
+as Oracle, MySQL, etc. This can highlight what type of payloads the attacker must make
+to successfully interact with the database. (Questions, 2025). This payload fails as the
+webpage may not accept the dashes to comment out sql code. This demonstrates that the webpage might be using MySQL as it also uses ‘#’ to comment. (MySQL :: MySQL 9.7 Reference Manual :: 11.7 Comments, 2026).
+
+![A successful authentication bypass payload](screenshots/5.png)
+
+The payload works as the first commas closes the first part of the string and begins a
+new condition with ‘OR’ the ‘1’ = ‘1’ sets the condition to always true and the ‘#’
+comments out the password completely. The attacker successfully bypasses login and
+is granted access.
+
 #### 2.2.2 Union-based SQLi
+
+Union based SQLi involves attackers using the UNION operation keyword to combine
+multiple select statements into the original select statement. Union based SQLi can
+test how many columns are in a table and can reveal their contents. (PortSwigger, n.d.)
+
+![A successful union select payload](screenshots/6.png)
+
+The payload sucessfully executes meaning that the database the site uses has 3
+columns of data. While no column data was extracted, this discovery can lead to
+another payload to guess the column names from the table to extract the data contents.
+The ‘Appointment’ machine is limited to show the flag or a failed login screen when a
+payload is executed.
+
+![A successful data extraction payload](screenshots/7.png)
+
+The payload passes with specific column names and a user table. These were
+essentially estimated by the attacker as a user credential table would very likely have an
+identifier (primary key), username and password. This payload would effectively show
+all data in all those listed columns however due to the limited nature of the machine
+environment it only lists the flag page.
+
 ### 2.3 Automated Blind SQLi (SQLMAP)
 ## 3. Defending 
 ### 3.1 Parameterised Queries / Prepared Statements
