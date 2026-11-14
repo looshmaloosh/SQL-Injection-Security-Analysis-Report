@@ -6,6 +6,12 @@ Ali Fares | RED TEAM | https://www.linkedin.com/in/ali-fares-86870733a/
 
 Joshua Kwon | BLUE TEAM | https://www.linkedin.com/in/joshua-kwon-05914337a/
 
+**University:** University of Technology Sydney (UTS)  
+**Subject:** 41182 System Security  
+**Assessment Result:** 40/40 (100%)  
+**Environment:** Hack The Box - Appointment  
+**Tools:** Kali Linux, Burp Suite, sqlmap, MySQL
+
 ## 0. Executive Summary
 
 This report delves into the concept of SQL injection (SQLi) vulnerabilities and how
