@@ -128,6 +128,64 @@ all data in all those listed columns however due to the limited nature of the ma
 environment it only lists the flag page.
 
 ### 2.3 Automated Blind SQLi (SQLMAP)
+
+Using the enumeration gathered from before, the best place to apply sqlmap would be
+on the webpage’s POST request.
+
+![The captured POST request using BurpSuite](screenshots/8.png)
+
+Using Burpsuite, the attacker can capture the post request and save it to their directory
+for sqlmap to use. Burpsuite is used as it accurately captures the POST request data
+with the correct format. (EC-Council, 2024)
+
+![SQLMAP's Enumeration](screenshots/9.png)
+
+![SQLMAP's Enumeration](screenshots/9(2).png)
+
+SQLmap –-batch ensures that no user input is required to test different payloads.
+SQLmap initiates automated tests using the POST request parameters and identifies
+vulnerabilities that can be used. In this case, it discovers that the login does use
+‘MySQL’ and that the login input is vulnerable to Union-based SQLi and blind time-
+based SQLi. It also returns an example payload for the username and password login
+inputs respectively. (Sqlmap | Kali Linux Tools, n.d.)
+
+![SQLMAP database retrieval](screenshots/10.png)
+
+![SQLMAP database retrieval](screenshots/10(2).png)
+
+This reveals the names of the databases used and extracts them periodically using
+time-based SQLi. It concluded by showing the amount and names of the databases
+used by the webpage. Appdb would be the default one with user data and
+information_schema likely holds the metadata. (Sqlmap | Kali Linux Tools, n.d.)
+
+![SQLMAP table retrieval](screenshots/11.png)
+
+![SQLMAP table retrieval](screenshots/11(2).png)
+
+Sqlmap continues to use time-based SQLi inject to periodically extract the table
+name(s) in appdb. It reveals that ‘users’ is the only table.
+
+![SQLMAP appdb's column retrieval](screenshots/12.png)
+
+![SQLMAP appdb's column retrieval](screenshots/12(2).png)
+
+Using the available extracted data, automated time-based SQLi is conducted to extract
+the column names and datatype being ID, password, and username columns.
+
+![SQLMAP data dump](screenshots/13.png)
+
+![SQLMAP data dump](screenshots/13(2).png)
+
+Finally, having extracted the column names for appdb, sqlmap extracts the data stored
+in each row for each column. It continues until the entire database content is extracted.
+As shown in the timestamps it takes some time to slowly extract each row bit by bit.
+
+![Attacker loggin in via extracted credentials](screenshots/14.png)
+Using the extracted table values (Figure 13) the attacker can successfully login as the
+admin using their correct username and password with no extra verification. This is
+visualised in the “Appointment” machine as the captured flag as a limitation of the
+machine’s capabilities.
+
 ## 3. Defending 
 ### 3.1 Parameterised Queries / Prepared Statements
 ### 3.2 Input Validation and Sanitisation
