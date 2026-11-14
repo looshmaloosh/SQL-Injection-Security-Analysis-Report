@@ -3,6 +3,7 @@ This project investigates SQL Injection (SQLi) vulnerabilities through practical
 ## Team Members
 
 Ali Fares | RED TEAM | https://www.linkedin.com/in/ali-fares-86870733a/
+
 Joshua Kwon | BLUE TEAM | https://www.linkedin.com/in/joshua-kwon-05914337a/
 
 ## 0. Executive Summary
