@@ -119,9 +119,7 @@ test how many columns are in a table and can reveal their contents. (PortSwigger
 
 ![A successful union select payload](screenshots/6.png)
 
-The payload successfully executes meaning that the database the site uses has 3
-columns of data. While no column data was extracted, this discovery can lead to
-another payload to guess the column names from the table to extract the data contents.
+The payload successfully executes the UNION payload indicating that there is three columns in the database. While no column data was extracted, this discovery can lead to another payload to guess the column names from the table to extract the data contents.
 The ‘Appointment’ machine is limited to show the flag or a failed login screen when a
 payload is executed.
 
