@@ -387,6 +387,20 @@ strengthen the security of the ‘Appointment’ system and reduce the risk of f
 attacks.
 
 ## 5. Lessons Learned
+
+Throughout this project, we gained a deeper understanding of SQL injection vulnerabilities, how attackers exploit them, and the defensive measures used to protect web applications. 
+
+- Understanding SQL Injection: We learned how insufficient input validation and insecure SQL queries can allow attackers to manipulate database operations, bypass authentication and potentially access sensitive information.
+
+- Manual vs Automated SQL Injection: We gained practical experience with authentication bypass and UNION-based SQL injection, before using sqlmap to automate more complex attacks. This demonstrated how automated tools can simplify database enumeration and data extraction compared to manual techniques.
+
+- Blind SQL Injection: Using time-based blind SQL injection demonstrated how attackers can extract database information even when the application does not directly display query results or detailed error messages. However, this technique required significantly more time to retrieve information.
+
+- Importance of Defensive Security: We explored how parameterised queries, input validation, Web Application Firewalls (WAFs) and secure error handling can reduce the risk of SQL injection. We also learned that relying on a single defensive measure may not provide sufficient protection.
+
+- Practical Security Tools: Using Burp Suite to capture HTTP POST requests and sqlmap to enumerate database contents improved our understanding of how security professionals identify, investigate and demonstrate web application vulnerabilities.
+
+Overall, this project reinforced the importance of understanding both offensive and defensive security techniques to identify vulnerabilities, assess their potential impact and recommend effective mitigation strategies.
 ## 6. References
 
 Cloudflare. (n.d.). What Is SQL Injection? | Cloudflare. Cloudflare.
