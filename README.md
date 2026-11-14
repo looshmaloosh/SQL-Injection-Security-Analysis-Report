@@ -418,7 +418,7 @@ Cloudflare. (n.d.). What Is SQL Injection? | Cloudflare. Cloudflare.
   https://www.cloudflare.com/learning/security/threats/sql-injection/
 
 EC-Council. (2024, May 8). Burp Suite for Penetration Testing of Web Applications | EC-
-  Council. Cybersecurity Exchange. https://www.eccouncil.org/cybersecurity-exchange/penetration-testing/burp-suite-penetration-    testing-web-application/
+  Council. Cybersecurity Exchange. https://www.eccouncil.org/cybersecurity-exchange/penetration-testing/burp-suite-penetration-testing-web-application/
 
 Hofesh, B. (2022, April 8). SQL Injection Attack: Real Life Attacks and Code Examples.
   Bright Security. https://brightsec.com/blog/sql-injection-attack/
