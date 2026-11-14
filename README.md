@@ -10,7 +10,7 @@ Joshua Kwon | BLUE TEAM | https://www.linkedin.com/in/joshua-kwon-05914337a/
 **Subject:** 41182 System Security  
 **Assessment Result:** 40/40 (100%)  
 **Environment:** Hack The Box - Appointment  
-**Tools:** Kali Linux, Burp Suite, sqlmap, MySQL
+**Tools:** Kali Linux, Burpsuite, sqlmap, MySQL
 
 ## 0. Executive Summary
 
@@ -119,7 +119,7 @@ test how many columns are in a table and can reveal their contents. (PortSwigger
 
 ![A successful union select payload](screenshots/6.png)
 
-The payload sucessfully executes meaning that the database the site uses has 3
+The payload successfully executes meaning that the database the site uses has 3
 columns of data. While no column data was extracted, this discovery can lead to
 another payload to guess the column names from the table to extract the data contents.
 The ‘Appointment’ machine is limited to show the flag or a failed login screen when a
@@ -138,7 +138,7 @@ environment it only lists the flag page.
 Using the enumeration gathered from before, the best place to apply sqlmap would be
 on the webpage’s POST request.
 
-![The captured POST request using BurpSuite](screenshots/8.png)
+![The captured POST request using Burpsuite](screenshots/8.png)
 
 Using Burpsuite, the attacker can capture the post request and save it to their directory
 for sqlmap to use. Burpsuite is used as it accurately captures the POST request data
@@ -224,14 +224,13 @@ concatenate user input before parameterisation occurs. Therefore, prepared
 statements should be combined with other security measures as part of a layered
 defence strategy.
 
-In figure 3.
 
 ![Secure parameterized query](screenshots/15.png)
 
 This is secure because the query structure is separated from user input. The database
 treats the username and password strictly as data, NOT executable SQL commands.
 
-Even if attacker enters:
+Even if an attacker enters:
 
 <b> ' OR '1'='1' </b>
 
@@ -276,11 +275,17 @@ requests, because attackers may target any input connected to the database
 ![Validation and sanitization example](screenshots/18.png)
 
 This demonstrates
+
 Validation:
+
 - empty($name) > ensures field is not blank
+  
 - filter_var($email, FILTER_VALIDATE_EMAIL) > checks valid email format
+  
 Sanitisation:
+
 - trim() > removes extra spaces
+  
 - htmlspecialchars() > prevents XSS attacks by escaping HTML
 
 Without validation/sanitisation, users can submit broken or fake data, attackers can
@@ -404,7 +409,7 @@ Throughout this project, we gained a deeper understanding of SQL injection vulne
 
 - Importance of Defensive Security: We explored how parameterised queries, input validation, Web Application Firewalls (WAFs) and secure error handling can reduce the risk of SQL injection. We also learned that relying on a single defensive measure may not provide sufficient protection.
 
-- Practical Security Tools: Using Burp Suite to capture HTTP POST requests and sqlmap to enumerate database contents improved our understanding of how security professionals identify, investigate and demonstrate web application vulnerabilities.
+- Practical Security Tools: Using Burpsuite to capture HTTP POST requests and sqlmap to enumerate database contents improved our understanding of how security professionals identify, investigate and demonstrate web application vulnerabilities.
 
 Overall, this project reinforced the importance of understanding both offensive and defensive security techniques to identify vulnerabilities, assess their potential impact and recommend effective mitigation strategies.
 ## 6. References
