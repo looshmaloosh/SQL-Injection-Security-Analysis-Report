@@ -37,6 +37,7 @@ and availability of systems and data. According to the Open Web Application Secu
 Project (OWASP), injection vulnerabilities continue to rank among the most dangerous
 web application security risks due to their widespread presence and severe
 consequences (OWASP, n.d.).
+
 One of the most common forms of an injection attack is Structured Query Language
 (SQL) injection. SQL injection, which can be abbreviated to “SQLi” involves injecting
 malicious SQL code into input fields in an application layer service which connects to
@@ -47,6 +48,7 @@ URL, form entry, or field entry. Once a vulnerability is found, a malicious SQL 
 formed with SQL language. The attack is then executed, and data is manipulated to the
 desire of the attacker. Depending on the results, data extracted may be used for further
 malicious purposes. (Hofesh, 2022)
+
 Defence against injection attacks should have a proactive approach where systems
 should be actively preventing injection attacks from ever successfully executing by
 having pre-built defences against specific vulnerabilities. Defence against general
@@ -62,6 +64,7 @@ predefined query structures rather than directly inserting the input into the SQ
 command. Even if an attacker attempts to enter malicious SQL code such as ' OR '1'='1,
 the database interprets the input as a normal string instead of executable code,
 preventing unauthorised access (OWASP, n.d.).
+
 ## 2. Attacking
 ### 2.1 HTB Machine ‘Appointment’ - Enumeration
 ### 2.2 In-Band SQLi
