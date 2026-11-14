@@ -187,9 +187,238 @@ visualised in the “Appointment” machine as the captured flag as a limitation
 machine’s capabilities.
 
 ## 3. Defending 
+
 ### 3.1 Parameterised Queries / Prepared Statements
+
+One of the most effective methods for defending against SQLi attacks is the use of
+parameterised queries, also known as prepared statements. Parameterised queries
+separate SQL commands from user input, ensuring that information entered into an
+application is treated strictly as data rather than executable SQL code. Cybersecurity
+organisations such as the Open Web Application Security Project recommend this
+approach because it greatly reduces the risk of malicious SQL commands being
+executed (OWASP, n.d.).
+
+In vulnerable applications, developers may build SQL queries by directly concatenating
+user input into a statement. Attackers can exploit this by inserting malicious SQL syntax
+that changes the behaviour of the database. Parameterised queries prevent this issue
+by using placeholders within the SQL statement and binding user input separately from
+the query structure. As a result, the database interprets the supplied input only as a
+literal value instead of executable code (OWASP, n.d.). For example, if an attacker
+enters a payload such as ' OR '1'='1, the database processes it as plain text rather than
+as part of the SQL logic (Cloudflare, n.d.).
+
+Prepared statements are effective because they defend against common SQLi
+techniques, including authentication bypass and union-based attacks. They are also
+supported by most modern programming languages and database frameworks, making
+them practical for real-world implementation. Additionally, parameterised queries
+improve code readability by separating database logic from user input handling.
+However, prepared statements are not a complete solution if implemented incorrectly.
+Developers may still create unsafe dynamic queries elsewhere in the application or
+concatenate user input before parameterisation occurs. Therefore, prepared
+statements should be combined with other security measures as part of a layered
+defence strategy.
+
+In figure 3.
+
+![Secure parameterized query](screenshots/15.png)
+
+This is secure because the query structure is separated from user input. The database
+treats the username and password strictly as data, NOT executable SQL commands.
+
+Even if attacker enters:
+
+<b> ' OR '1'='1' </b>
+
+it is treated as plain text instead of SQL code and SQLi fails.
+
+![Secure SQL with prepared statements](screenshots/16.png)
+
+Even if attacker enters:
+
+<b> ' OR '1'='1' </b>
+
+The attack FAILS and the login denied. This is because the input treated as DATA and
+not executable SQL.
+
+
 ### 3.2 Input Validation and Sanitisation
+
+Input validation and sanitisation are also important defences against SQLi attacks.
+Input validation checks whether user-supplied data matches expected formats or
+datatypes before processing occurs, while sanitisation removes potentially dangerous
+characters from input (SentinelOne, 2024). These techniques reduce the likelihood of
+malicious SQL statements being accepted by an application.
+
+One of the most effective approaches is whitelist validation, where only approved
+characters or patterns are accepted. For example, a username field may allow only
+alphanumeric characters within a specified length. If a user enters symbols commonly
+associated with SQLi attacks, the application rejects the input before processing it
+(OWASP, n.d.).
+
+Although sanitisation can reduce attack surfaces, it should not be relied on as the sole
+defence mechanism. Blacklist filtering is often ineffective because attackers can
+bypass restrictions using alternative SQL syntax or encoding methods (PortSwigger,
+n.d.). As a result, cybersecurity professionals recommend combining whitelist
+validation with parameterised queries rather than relying only on sanitisation
+techniques (OWASP, n.d.). Validation must also be implemented consistently across all
+user-controlled entry points, including login forms, URL parameters, cookies, and API
+requests, because attackers may target any input connected to the database
+(SentinelOne, 2024).
+
+![Simple HTML Form](screenshots/17.png)
+
+![Validation and sanitization example](screenshots/18.png)
+
+This demonstrates
+Validation:
+- empty($name) > ensures field is not blank
+- filter_var($email, FILTER_VALIDATE_EMAIL) > checks valid email format
+Sanitisation:
+- trim() > removes extra spaces
+- htmlspecialchars() > prevents XSS attacks by escaping HTML
+
+Without validation/sanitisation, users can submit broken or fake data, attackers can
+inject scripts like <script>alert(1)</script> and database and application security is
+compromised.
+
 ### 3.3 Web Application Firewalls and Error Handling
+
+Web Application Firewalls (WAFs) provide another layer of defence by monitoring and
+filtering HTTP traffic before requests reach the application. WAFs analyse incoming
+requests for suspicious patterns associated with SQLi payloads, including SQL
+keywords, comment operators, or abnormal query structures (Cloudflare, n.d.). If
+malicious behaviour is detected, the firewall may block or log the request before it
+reaches the server.
+
+WAFs are particularly useful for protecting legacy systems that may contain insecure
+code or vulnerabilities that cannot easily be fixed. They also help organisations identify
+repeated attack attempts and improve visibility into malicious traffic. However, WAFs
+should not replace secure coding practices because skilled attackers may still bypass
+filtering mechanisms using obfuscation or encoding techniques (PortSwigger, n.d.).
+Therefore, WAFs are most effective when combined with parameterised queries, input
+validation, and secure application design.
+
+Proper error handling is also essential for defending against SQLi attacks. Attackers
+often rely on detailed database error messages to gather information about database
+structures, query syntax, and table names during reconnaissance. Applications that
+expose verbose SQL errors may unintentionally assist attackers in crafting malicious
+payloads (OWASP, n.d.).
+
+To reduce this risk, applications should suppress detailed database errors and display
+only generic messages such as “Login failed” or “An unexpected error occurred.”
+Detailed logs should instead be stored securely for administrators and developers to
+review internally. By limiting the information exposed to attackers, organisations make it
+significantly more difficult for vulnerabilities to be exploited successfully (SentinelOne,
+2024).
+
+![Simple PHP page](screenshots/19.png)
+
+Without WAF, database returns all users (SQL injection success)
+
+With WAF, request is blocked, HTTP 403 forbidden returned, and attacker never reaches
+PHP/MySQL.
+
+![BAD example of error handling](screenshots/20.png)
+
+The problem is that it exposes database structure and helps attackers fingerprint
+system.
+
+![GOOD example of secure error handling](screenshots/21.png)
+
+Combining WAF + Error Handling:
+
+User Request > WAF (ModSecurity) > (if clean) > PHP Application > Error Handling Layer
+
+> Database
+
+This matters due to WAF being a prevention layer and error handling being damage
+control and information hiding. Together they provide defence in depth, reduced attack
+surface and no sensitive leakage.
+
 ## 4. Discussion
+
+Ultimately, the attacks succeeded on the ‘Appointment’ machine as user input in no
+way was validated or sanitised allowing for the attacker to craft malicious payloads to
+execute malicious requests with the backend database. Even though the webpage
+completely hid any sql errors from showing up, that alone is not enough to completely
+mitigate SQLi as visual behaviour is not the only behaviour attackers analyse.
+
+Although manual SQLi is simpler and much easier to understand the target, automated
+SQLi tools like sqlmap can test services automatically and can have specific inputs
+prioritised by the user. Manual Blind SQLi takes lots of time to reconstruct the database
+bit by bit and is easier to complete using an automated tool that generates targeted
+payloads. (Sqlmap | Kali Linux Tools, n.d.)
+
+![Heat Map of SQLi Attacks](screenshots/t1.png)
+
+Although each attack had varying levels of difficulty, each one poses as a significant
+threat to systems and users as each one can lead to lateral movement just from basic
+authentication bypass. Automatic Time-based SQLi was the most dangerous attack due
+to its ability to automatically extract sensitive user data.
+
+If credentials were stolen from a MySQL database similarly to how it was done in
+‘Appointment’, stolen credentials can lead to severe real-world consequences such as
+lateral movement to neighbouring systems or identity theft/abuse leading to severe
+financial or reputation damage to any company or person.
+
+To harden the current ‘Appointment’ system, multiple defensive controls should be
+implemented to reduce the likelihood and impact of SQLi attacks. The most effective
+defence is the use of prepared statements and parameterised queries, as these
+separate SQL commands from user input and ensure malicious payloads are treated as
+data rather than executable code (OWASP, n.d.). This would significantly reduce the
+effectiveness of authentication bypass and union-based SQLi attacks demonstrated
+during testing.
+
+![Attacks and their corresponding defenses](screenshots/t2.png)
+
+Input validation and sanitisation should also be applied consistently across all user-
+controlled fields. Whitelist validation can restrict inputs to approved characters and
+formats, preventing attackers from submitting malicious SQL syntax (SentinelOne,
+2024). However, validation alone should not be relied upon because attackers may
+bypass weak filtering methods using alternative encoding or SQL syntax (PortSwigger,
+n.d.).
+
+Additionally, Web Application Firewalls (WAFs) and rate limiting mechanisms could help
+defend against automated attacks performed using tools such as sqlmap. WAFs can
+detect and block suspicious SQLi payloads before they reach the application, while rate
+limiting reduces the speed and effectiveness of automated enumeration attempts
+(Cloudflare, n.d.). Together, these layered security controls would significantly
+strengthen the security of the ‘Appointment’ system and reduce the risk of future SQLi
+attacks.
+
 ## 5. Lessons Learned
 ## 6. References
+
+Cloudflare. (n.d.). What Is SQL Injection? | Cloudflare. Cloudflare.
+  https://www.cloudflare.com/learning/security/threats/sql-injection/
+
+EC-Council. (2024, May 8). Burp Suite for Penetration Testing of Web Applications | EC-
+  Council. Cybersecurity Exchange. https://www.eccouncil.org/cybersecurity-exchange/penetration-testing/burp-suite-penetration-    testing-web-application/
+
+Hofesh, B. (2022, April 8). SQL Injection Attack: Real Life Attacks and Code Examples.
+  Bright Security. https://brightsec.com/blog/sql-injection-attack/
+
+MySQL :: MySQL 9.7 Reference Manual :: 11.7 Comments. (2026). Mysql.com.
+  https://dev.mysql.com/doc/refman/9.7/en/comments.html
+
+Nmap. (2019). Options Summary | Nmap Network Scanning. Nmap.org.
+  https://nmap.org/book/man-briefoptions.html
+
+Owasp. (n.d.). Injection Flaws | OWASP. Owasp.org. https://owasp.org/www-community/Injection_Flaws
+
+PortSwigger. (n.d.). What is Blind SQL Injection? Tutorial & Examples. Portswigger.net.
+  https://portswigger.net/web-security/sql-injection/blind
+
+PortSwigger. (n.d.). SQL injection UNION attacks | Web Security Academy.
+  Portswigger.net. https://portswigger.net/web-security/sql-injection/union-attacks
+
+Questions. (2025, November 9). What is database enumeration? LabEx.
+  https://labex.io/questions/what-is-database-enumeration-906151
+
+scriptpy. (2026, January 5). SQL injection vulnerability allowing login bypass. Medium.
+  https://medium.com/@g.a.istrati/sql-injection-vulnerability-allowing-login-bypass-911e5b6ac656
+
+SentinelOne. (2024, October 31). Injection Attacks: Types, Techniques, and Prevention.
+  SentinelOne. https://www.sentinelone.com/cybersecurity-101/cybersecurity/injection-attacks/
+
+sqlmap | Kali Linux Tools. (n.d.). Kali Linux. https://www.kali.org/tools/sqlmap/
