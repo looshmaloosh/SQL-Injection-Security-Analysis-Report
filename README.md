@@ -146,6 +146,8 @@ with the correct format. (EC-Council, 2024)
 
 ![SQLMAP's Enumeration](screenshots/9(2).png)
 
+* Figure 9: SQLMAP's Enumeration. *
+
 SQLmap –-batch ensures that no user input is required to test different payloads.
 SQLmap initiates automated tests using the POST request parameters and identifies
 vulnerabilities that can be used. In this case, it discovers that the login does use
@@ -157,6 +159,8 @@ inputs respectively. (Sqlmap | Kali Linux Tools, n.d.)
 
 ![SQLMAP database retrieval](screenshots/10(2).png)
 
+* Figure 10: SQLMAP database retrieval. *
+
 This reveals the names of the databases used and extracts them periodically using
 time-based SQLi. It concluded by showing the amount and names of the databases
 used by the webpage. Appdb would be the default one with user data and
@@ -166,6 +170,8 @@ information_schema likely holds the metadata. (Sqlmap | Kali Linux Tools, n.d.)
 
 ![SQLMAP table retrieval](screenshots/11(2).png)
 
+* Figure 11: SQLMAP table retrieval. *
+
 Sqlmap continues to use time-based SQLi inject to periodically extract the table
 name(s) in appdb. It reveals that ‘users’ is the only table.
 
@@ -173,12 +179,16 @@ name(s) in appdb. It reveals that ‘users’ is the only table.
 
 ![SQLMAP appdb's column retrieval](screenshots/12(2).png)
 
+* Figure 12: SQLMAP appdb's column retrieval. *
+
 Using the available extracted data, automated time-based SQLi is conducted to extract
 the column names and datatype being ID, password, and username columns.
 
 ![SQLMAP data dump](screenshots/13.png)
 
 ![SQLMAP data dump](screenshots/13(2).png)
+
+* Figure 13: SQLMAP data dump. *
 
 Finally, having extracted the column names for appdb, sqlmap extracts the data stored
 in each row for each column. It continues until the entire database content is extracted.
