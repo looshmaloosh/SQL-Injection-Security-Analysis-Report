@@ -67,6 +67,9 @@ preventing unauthorised access (OWASP, n.d.).
 
 ## 2. Attacking
 ### 2.1 HTB Machine ‘Appointment’ - Enumeration
+
+![The Target Login Page](screenshots/1.png)
+
 ### 2.2 In-Band SQLi
 #### 2.2.1 Authentication Bypass SQLi
 #### 2.2.2 Union-based SQLi
